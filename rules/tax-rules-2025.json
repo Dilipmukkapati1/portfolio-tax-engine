@@ -1,0 +1,74 @@
+{
+  "taxYear": 2025,
+  "source": "IRS Rev. Proc. 2024-40 (approximate MVP brackets)",
+  "standardDeduction": {
+    "single": 15000,
+    "married_filing_jointly": 30000,
+    "married_filing_separately": 15000,
+    "head_of_household": 22500,
+    "qualifying_surviving_spouse": 30000
+  },
+  "brackets": {
+    "single": [
+      { "upTo": 11925, "rate": 0.10 },
+      { "upTo": 48475, "rate": 0.12 },
+      { "upTo": 103350, "rate": 0.22 },
+      { "upTo": 197300, "rate": 0.24 },
+      { "upTo": 250525, "rate": 0.32 },
+      { "upTo": 626350, "rate": 0.35 },
+      { "upTo": null, "rate": 0.37 }
+    ],
+    "married_filing_jointly": [
+      { "upTo": 23850, "rate": 0.10 },
+      { "upTo": 96950, "rate": 0.12 },
+      { "upTo": 206700, "rate": 0.22 },
+      { "upTo": 394600, "rate": 0.24 },
+      { "upTo": 501050, "rate": 0.32 },
+      { "upTo": 751600, "rate": 0.35 },
+      { "upTo": null, "rate": 0.37 }
+    ],
+    "married_filing_separately": [
+      { "upTo": 11925, "rate": 0.10 },
+      { "upTo": 48475, "rate": 0.12 },
+      { "upTo": 103350, "rate": 0.22 },
+      { "upTo": 197300, "rate": 0.24 },
+      { "upTo": 250525, "rate": 0.32 },
+      { "upTo": 375800, "rate": 0.35 },
+      { "upTo": null, "rate": 0.37 }
+    ],
+    "head_of_household": [
+      { "upTo": 17000, "rate": 0.10 },
+      { "upTo": 64850, "rate": 0.12 },
+      { "upTo": 103350, "rate": 0.22 },
+      { "upTo": 197300, "rate": 0.24 },
+      { "upTo": 250500, "rate": 0.32 },
+      { "upTo": 626350, "rate": 0.35 },
+      { "upTo": null, "rate": 0.37 }
+    ],
+    "qualifying_surviving_spouse": [
+      { "upTo": 23850, "rate": 0.10 },
+      { "upTo": 96950, "rate": 0.12 },
+      { "upTo": 206700, "rate": 0.22 },
+      { "upTo": 394600, "rate": 0.24 },
+      { "upTo": 501050, "rate": 0.32 },
+      { "upTo": 751600, "rate": 0.35 },
+      { "upTo": null, "rate": 0.37 }
+    ]
+  },
+  "capitalGainsRates": {
+    "single": [
+      { "upTo": 48350, "rate": 0 },
+      { "upTo": 533400, "rate": 0.15 },
+      { "upTo": null, "rate": 0.20 }
+    ],
+    "married_filing_jointly": [
+      { "upTo": 96700, "rate": 0 },
+      { "upTo": 600050, "rate": 0.15 },
+      { "upTo": null, "rate": 0.20 }
+    ]
+  },
+  "childTaxCredit": 2000,
+  "retirement401kLimit": 23500,
+  "hsaFamilyLimit": 8550,
+  "hsaSingleLimit": 4300
+}

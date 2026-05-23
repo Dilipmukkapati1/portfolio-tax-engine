@@ -1,0 +1,31 @@
+{
+  "name": "@portfolio/tax-engine",
+  "version": "0.1.0",
+  "description": "Pure TypeScript federal tax estimation and strategy suggestions",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "rules"],
+  "scripts": {
+    "build": "tsc && cp -r rules dist/rules 2>/dev/null || xcopy /E /I rules dist\\rules 2>nul || true",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@portfolio/contracts": "file:../portfolio-contracts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
