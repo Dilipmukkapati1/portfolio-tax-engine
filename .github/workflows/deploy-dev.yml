@@ -1,0 +1,56 @@
+name: Deploy dev
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-dev-tax-engine
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: portfolio-tax-engine
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Dilipmukkapati1/portfolio-contracts
+          path: portfolio-contracts
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install and verify tax-engine
+        working-directory: portfolio-tax-engine
+        run: |
+          cd ../portfolio-contracts && npm ci && npm run build
+          npm ci
+          npm run lint
+          npm test
+          npm run build
+
+  trigger-downstream:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: dev
+    strategy:
+      fail-fast: false
+      matrix:
+        repo:
+          - Dilipmukkapati1/portfolio-api
+          - Dilipmukkapati1/portfolio-batch
+    steps:
+      - name: Trigger ${{ matrix.repo }} deploy
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.REPO_DISPATCH_PAT }}
+          repository: ${{ matrix.repo }}
+          event-type: deploy-dev
+          client-payload: '{"ref":"${{ github.ref }}"}'

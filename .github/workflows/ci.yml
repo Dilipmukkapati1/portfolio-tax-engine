@@ -2,22 +2,34 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+
+# develop → deploy-dev.yml (Azure dev) | main → deploy-prod.yml (Azure prod)
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: portfolio-tax-engine
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Dilipmukkapati1/portfolio-contracts
+          path: portfolio-contracts
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Build contracts dependency
-        working-directory: ../portfolio-contracts
-        run: npm ci && npm run build
-      - run: npm ci
-      - run: npm run lint
-      - run: npm test
-      - run: npm run build
+
+      - name: Install and verify tax-engine
+        working-directory: portfolio-tax-engine
+        run: |
+          cd ../portfolio-contracts && npm ci && npm run build
+          npm ci
+          npm run lint
+          npm test
+          npm run build
