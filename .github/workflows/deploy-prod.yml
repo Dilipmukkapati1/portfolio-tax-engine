@@ -9,6 +9,9 @@ concurrency:
   group: deploy-prod-tax-engine
   cancel-in-progress: true
 
+env:
+  LIB_REF: main
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -21,7 +24,7 @@ jobs:
         with:
           repository: Dilipmukkapati1/portfolio-contracts
           path: portfolio-contracts
-          ref: ${{ github.ref }}
+          ref: ${{ env.LIB_REF }}
 
       - uses: actions/setup-node@v4
         with:
@@ -31,7 +34,7 @@ jobs:
         working-directory: portfolio-tax-engine
         run: |
           cd ../portfolio-contracts && npm ci && npm run build
-          npm ci
+          cd ../portfolio-tax-engine && npm ci
           npm run lint
           npm test
           npm run build
