@@ -13,6 +13,15 @@ function computeGrossIncome(input: TaxYearInput): number {
   );
 }
 
+/** Above-the-line reductions: manual adjustments plus pre-tax deferrals from household members. */
+function computeAboveTheLineAdjustments(input: TaxYearInput): number {
+  return (
+    input.adjustments +
+    input.retirementContributions +
+    input.hsaContributions
+  );
+}
+
 function getStandardDeduction(
   filingStatus: FilingStatus,
   rules: TaxRulePack,
@@ -54,7 +63,8 @@ export function estimateFederalTax(
   rules: TaxRulePack
 ): TaxEstimate {
   const grossIncome = computeGrossIncome(input);
-  const agi = Math.max(0, grossIncome - input.adjustments);
+  const aboveTheLine = computeAboveTheLineAdjustments(input);
+  const agi = Math.max(0, grossIncome - aboveTheLine);
 
   const standardDeduction = getStandardDeduction(
     input.filingStatus,
@@ -84,7 +94,9 @@ export function estimateFederalTax(
     marginalRate: round4(marginalRate),
     breakdown: {
       grossIncome: round2(grossIncome),
-      adjustments: round2(input.adjustments),
+      adjustments: round2(aboveTheLine),
+      retirementContributions: round2(input.retirementContributions),
+      hsaContributions: round2(input.hsaContributions),
       ordinaryTax: round2(tax),
     },
   };

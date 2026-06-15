@@ -1,4 +1,5 @@
 import type { Strategy } from "@portfolio/contracts";
+import { prepareTaxInputForEstimate } from "@portfolio/contracts";
 import { estimateFederalTax } from "./estimate.js";
 import type { HouseholdContext, TaxRulePack } from "./types.js";
 
@@ -7,17 +8,18 @@ export function suggestStrategies(
   rules: TaxRulePack
 ): Strategy[] {
   const strategies: Strategy[] = [];
-  const base = estimateFederalTax(ctx.taxInput, rules);
+  const base = estimateFederalTax(prepareTaxInputForEstimate(ctx.taxInput), rules);
 
   if (ctx.persona === "w2_employee" || ctx.persona === "family_with_kids") {
     const limit = rules.retirement401kLimit ?? 23500;
     if (ctx.taxInput.retirementContributions < limit) {
       const room = limit - ctx.taxInput.retirementContributions;
       const withContrib = estimateFederalTax(
-        {
+        prepareTaxInputForEstimate({
           ...ctx.taxInput,
-          adjustments: ctx.taxInput.adjustments + Math.min(room, 10000),
-        },
+          retirementContributions:
+            ctx.taxInput.retirementContributions + Math.min(room, 10000),
+        }),
         rules
       );
       strategies.push({

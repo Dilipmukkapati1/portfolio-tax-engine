@@ -28,6 +28,34 @@ describe("estimateFederalTax", () => {
     expect(result.marginalRate).toBeGreaterThan(0);
   });
 
+  it("reduces AGI by pre-tax 401(k) and HSA contributions", () => {
+    const withoutDeferrals: TaxYearInput = {
+      taxYear: 2025,
+      filingStatus: "single",
+      wages: 85000,
+      selfEmploymentIncome: 0,
+      interestIncome: 0,
+      dividendIncome: 0,
+      capitalGainsShort: 0,
+      capitalGainsLong: 0,
+      otherIncome: 0,
+      adjustments: 0,
+      dependents: 0,
+      retirementContributions: 0,
+      hsaContributions: 0,
+    };
+    const withDeferrals: TaxYearInput = {
+      ...withoutDeferrals,
+      retirementContributions: 23000,
+      hsaContributions: 4150,
+    };
+    const base = estimateFederalTax(withoutDeferrals, rules);
+    const reduced = estimateFederalTax(withDeferrals, rules);
+    expect(reduced.adjustedGrossIncome).toBe(85000 - 23000 - 4150);
+    expect(reduced.federalTax).toBeLessThan(base.federalTax);
+    expect(reduced.taxableIncome).toBeLessThan(base.taxableIncome);
+  });
+
   it("returns zero tax for income below standard deduction", () => {
     const input: TaxYearInput = {
       taxYear: 2025,
@@ -46,6 +74,29 @@ describe("estimateFederalTax", () => {
     };
     const result = estimateFederalTax(input, rules);
     expect(result.federalTax).toBe(0);
+  });
+
+  it("reduces AGI using 2026 401(k) limit", () => {
+    const rules = loadRulePack(2026);
+    const input: TaxYearInput = {
+      taxYear: 2026,
+      filingStatus: "married_filing_jointly",
+      wages: 395000,
+      selfEmploymentIncome: 0,
+      interestIncome: 0,
+      dividendIncome: 0,
+      capitalGainsShort: 0,
+      capitalGainsLong: 0,
+      otherIncome: 0,
+      adjustments: 0,
+      dependents: 0,
+      retirementContributions: 49000,
+      hsaContributions: 0,
+    };
+    const result = estimateFederalTax(input, rules);
+    expect(result.adjustedGrossIncome).toBe(346000);
+    expect(result.standardDeduction).toBe(32200);
+    expect(result.taxableIncome).toBe(313800);
   });
 
   it("suggests strategies for business owner persona", () => {
