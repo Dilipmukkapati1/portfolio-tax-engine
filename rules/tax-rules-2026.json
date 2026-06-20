@@ -70,5 +70,8 @@
   "childTaxCredit": 2000,
   "retirement401kLimit": 24500,
   "hsaFamilyLimit": 8750,
-  "hsaSingleLimit": 4400
+  "hsaSingleLimit": 4400,
+  "fsaHealthLimit": 3300,
+  "fsaDependentCareLimit": 5000,
+  "fsaDependentCareLimitMfs": 2500
 }

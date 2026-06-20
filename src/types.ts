@@ -15,6 +15,9 @@ export interface TaxRulePack {
   retirement401kLimit?: number;
   hsaFamilyLimit?: number;
   hsaSingleLimit?: number;
+  fsaHealthLimit?: number;
+  fsaDependentCareLimit?: number;
+  fsaDependentCareLimitMfs?: number;
 }
 
 export interface HouseholdContext {
