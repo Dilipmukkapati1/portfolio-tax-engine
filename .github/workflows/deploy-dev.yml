@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  LIB_REF: develop
+  LIB_REF: main
 
 jobs:
   verify:
