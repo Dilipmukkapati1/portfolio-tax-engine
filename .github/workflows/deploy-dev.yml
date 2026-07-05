@@ -1,16 +1,18 @@
-name: Deploy prod
+name: Deploy dev
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
   repository_dispatch:
-    types: [deploy-prod]
+    types: [deploy-dev]
 
 concurrency:
-  group: deploy-prod-tax-engine
+  group: deploy-dev-tax-engine
   cancel-in-progress: true
 
 env:
-  LIB_REF: main
+  LIB_REF: develop
 
 jobs:
   verify:
@@ -42,7 +44,7 @@ jobs:
   trigger-downstream:
     needs: verify
     runs-on: ubuntu-latest
-    environment: prod
+    environment: dev
     strategy:
       fail-fast: false
       matrix:
@@ -55,5 +57,5 @@ jobs:
         with:
           token: ${{ secrets.REPO_DISPATCH_PAT }}
           repository: ${{ matrix.repo }}
-          event-type: deploy-prod
+          event-type: deploy-dev
           client-payload: '{"ref":"${{ github.ref }}"}'
